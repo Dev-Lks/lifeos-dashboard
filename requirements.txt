@@ -1,0 +1,9 @@
+# Hermes LifeOS Dashboard — Python dependencies
+# Core
+psutil>=5.9
+
+# Content rendering
+markdown>=3.4
+
+# SSE / streaming
+sse-starlette>=1.6  # optional, only if using ASGI mode

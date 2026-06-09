@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>ATLAS · Hermes Life OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231a1a1a'/%3E%3Ccircle cx='32' cy='22' r='14' fill='%2300e5a0'/%3E%3Ccircle cx='32' cy='22' r='6' fill='%231a1a1a'/%3E%3C/svg%3E">
+<style>
+/* ═══════ ATLAS-CENTRIC OVERRIDES ═══════ */
+:root {
+  --atlas-bg: #1a1a1a;
+  --atlas-accent: #00e5a0;
+  --atlas-accent-hover: #33ffb0;
+  --atlas-accent-muted: rgba(0,229,160,0.12);
+  --atlas-secondary: #ffb6c1;
+  --atlas-secondary-muted: rgba(255,182,193,0.10);
+  --atlas-card: rgba(255,255,255,0.06);
+  --atlas-card-hover: rgba(255,255,255,0.10);
+  --atlas-border: rgba(255,255,255,0.08);
+  --atlas-border-hover: rgba(255,255,255,0.16);
+  --atlas-text: #f5f5f5;
+  --atlas-text-secondary: rgba(255,255,255,0.60);
+  --atlas-text-tertiary: rgba(255,255,255,0.35);
+}
+
+/* ── Workspace: Atlas is the center ── */
+.os-workspace {
+  grid-template-columns: 1.6fr 1fr !important;
+}
+
+.tab-area {
+  padding: 16px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Atlas Hub — Primary View ── */
+.atlas-hub {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px;
+}
+
+/* ── Hero greeting ── */
+.atlas-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(0,229,160,0.10), rgba(255,182,193,0.06));
+  border: 1px solid var(--atlas-border);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  flex-shrink: 0;
+}
+.atlas-hero-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25), transparent 50%),
+              linear-gradient(135deg, var(--atlas-accent), #00c893);
+  box-shadow: 0 0 24px rgba(0,229,160,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+  font-size: 24px;
+  font-weight: 800;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}
+.atlas-hero-info h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin: 0;
+  color: var(--atlas-text);
+}
+.atlas-hero-info p {
+  font-size: 13px;
+  color: var(--atlas-text-secondary);
+  margin: 2px 0 0;
+}
+.atlas-hero-status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--atlas-text-secondary);
+}
+.atlas-hero-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--atlas-accent);
+  box-shadow: 0 0 10px var(--atlas-accent);
+  animation: atlasPulse 2s ease-in-out infinite;
+}
+@keyframes atlasPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* ── Voice-enabled input bar ── */
+.atlas-input-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--atlas-card);
+  border: 1px solid var(--atlas-border);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  flex-shrink: 0;
+}
+.atlas-input-bar:focus-within {
+  border-color: var(--atlas-accent);
+  box-shadow: 0 0 0 2px var(--atlas-accent-muted);
+}
+.atlas-voice-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid var(--atlas-border);
+  background: var(--atlas-card);
+  color: var(--atlas-text-secondary);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.atlas-voice-btn:hover {
+  background: var(--atlas-accent-muted);
+  border-color: var(--atlas-accent);
+  color: var(--atlas-accent);
+}
+.atlas-voice-btn.active {
+  background: var(--atlas-accent);
+  border-color: var(--atlas-accent);
+  color: #1a1a1a;
+  box-shadow: 0 0 16px rgba(0,229,160,0.4);
+  animation: voiceGlow 1s ease-in-out infinite;
+}
+@keyframes voiceGlow {
+  0%, 100% { box-shadow: 0 0 16px rgba(0,229,160,0.4); }
+  50% { box-shadow: 0 0 28px rgba(0,229,160,0.7); }
+}
+.atlas-input-bar textarea {
+  flex: 1;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--atlas-text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  min-height: 22px;
+  max-height: 120px;
+  line-height: 1.5;
+  padding: 0;
+}
+.atlas-input-bar textarea::placeholder {
+  color: var(--atlas-text-tertiary);
+}
+.atlas-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: var(--atlas-accent);
+  color: #1a1a1a;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.atlas-send-btn:hover {
+  background: var(--atlas-accent-hover);
+  box-shadow: 0 0 16px rgba(0,229,160,0.3);
+}
+.atlas-send-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Atlas Chat Area ── */
+.atlas-chat-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  min-height: 0;
+}
+.atlas-chat-area::-webkit-scrollbar { width: 4px; }
+.atlas-chat-area::-webkit-scrollbar-track { background: transparent; }
+.atlas-chat-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+/* ── Suggestion chips ── */
+.atlas-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.atlas-chip {
+  border: 1px solid var(--atlas-border);
+  background: var(--atlas-card);
+  color: var(--atlas-text-secondary);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'Inter', sans-serif;
+  white-space: nowrap;
+}
+.atlas-chip:hover {
+  border-color: var(--atlas-accent);
+  color: var(--atlas-accent);
+  background: var(--atlas-accent-muted);
+}
+
+/* ── Info Panel (right side) ── */
+.atlas-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  overflow-y: auto;
+  min-height: 0;
+}
+.atlas-info-panel::-webkit-scrollbar { width: 4px; }
+.atlas-info-panel::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+
+.atlas-info-card {
+  background: var(--atlas-card);
+  border: 1px solid var(--atlas-border);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s;
+}
+.atlas-info-card:hover {
+  border-color: var(--atlas-accent-muted);
+}
+.atlas-info-card-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--atlas-text-tertiary);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Focus items */
+.atlas-focus-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  cursor: default;
+}
+.atlas-focus-item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--atlas-border);
+}
+.atlas-focus-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.atlas-focus-dot.high { background: #ff6b6b; box-shadow: 0 0 6px #ff6b6b; }
+.atlas-focus-dot.medium { background: #ffb347; box-shadow: 0 0 6px #ffb347; }
+.atlas-focus-dot.low { background: #60a5fa; }
+.atlas-focus-text {
+  flex: 1;
+  font-size: 13px;
+  color: var(--atlas-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.atlas-focus-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.atlas-focus-badge.pending { background: rgba(255,179,71,0.12); color: #ffb347; }
+.atlas-focus-badge.in_progress { background: rgba(96,165,250,0.12); color: #60a5fa; }
+
+/* Agent mini status */
+.atlas-agent-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 13px;
+}
+.atlas-agent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.atlas-agent-dot.idle { background: var(--atlas-text-tertiary); }
+.atlas-agent-dot.active { background: var(--atlas-accent); box-shadow: 0 0 8px var(--atlas-accent); }
+.atlas-agent-name {
+  color: var(--atlas-text);
+  font-weight: 500;
+  flex: 1;
+}
+.atlas-agent-queued {
+  font-size: 11px;
+  color: var(--atlas-text-tertiary);
+}
+
+/* Health mini */
+.atlas-health-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.atlas-health-item {
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid transparent;
+  text-align: center;
+}
+.atlas-health-value {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--atlas-text);
+  font-family: 'JetBrains Mono', monospace;
+}
+.atlas-health-label {
+  display: block;
+  font-size: 10px;
+  color: var(--atlas-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 2px;
+}
+
+/* Finance mini */
+.atlas-finance-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.atlas-finance-row:last-child { border-bottom: none; }
+.atlas-finance-cat { color: var(--atlas-text-secondary); }
+.atlas-finance-val { font-weight: 600; color: var(--atlas-text); }
+.atlas-finance-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.06);
+  margin: 4px 0;
+  overflow: hidden;
+}
+.atlas-finance-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--atlas-accent);
+}
+
+/* ── Thinking indicator ── */
+.atlas-thinking-bar {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--atlas-text-tertiary);
+  flex-shrink: 0;
+}
+.atlas-thinking-bar.visible {
+  display: flex;
+}
+.atlas-thinking-dots {
+  display: flex;
+  gap: 4px;
+}
+.atlas-thinking-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--atlas-accent);
+  border-radius: 50%;
+  animation: thinkBounce 1.2s ease-in-out infinite;
+}
+.atlas-thinking-dot:nth-child(2) { animation-delay: 0.15s; }
+.atlas-thinking-dot:nth-child(3) { animation-delay: 0.30s; }
+@keyframes thinkBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ── Empty state ── */
+.atlas-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 40px;
+  color: var(--atlas-text-tertiary);
+  text-align: center;
+}
+.atlas-empty-icon {
+  font-size: 42px;
+  opacity: 0.4;
+  margin-bottom: 8px;
+}
+.atlas-empty-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--atlas-text-secondary);
+}
+.atlas-empty-sub {
+  font-size: 13px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+/* ── Tab content panels — hide by default, show Atlas ── */
+.tab-panel:not(#panel-overview) {
+  display: none !important;
+}
+.tab-panel#panel-overview {
+  display: flex !important;
+  height: 100%;
+}
+
+/* ── Sidebar nav active state override ── */
+.tab-btn.active {
+  color: var(--atlas-accent) !important;
+  background: var(--atlas-accent-muted) !important;
+}
+
+/* ── Tab content in workspace ── */
+.tab-content-area {
+  display: none;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+}
+.tab-content-area.visible {
+  display: flex;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .os-workspace {
+    grid-template-columns: 1fr !important;
+  }
+  .atlas-info-panel {
+    display: none;
+  }
+  .atlas-info-panel.mobile-visible {
+    display: flex;
+    max-height: 50vh;
+    border-top: 1px solid var(--atlas-border);
+  }
+}
+@media (max-width: 720px) {
+  .atlas-hero { padding: 14px 16px; }
+  .atlas-hero-avatar { width: 40px; height: 40px; font-size: 18px; }
+  .atlas-hero-info h1 { font-size: 18px; }
+  .atlas-hero-status { display: none; }
+  .atlas-input-bar { padding: 10px 12px; }
+}
+</style>
+</head>
+<body>
+<div class="app lifeos-v4">
+  <aside class="os-sidebar nav" aria-label="Life OS navigation">
+    <div class="os-brand">
+      <div class="os-brand-mark"><span style="color:var(--atlas-accent)">A</span></div>
+      <div><strong>ATLAS</strong><span>Life OS · Lucas</span></div>
+    </div>
+    <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+    <div class="nav-tabs os-nav" id="navTabs">
+      <button class="tab-btn active" data-tab="overview"><span>◈</span>Atlas</button>
+      <button class="tab-btn" data-tab="projects"><span>◇</span>Projects</button>
+      <button class="tab-btn" data-tab="tasks"><span>✓</span>Tasks</button>
+      <button class="tab-btn" data-tab="agents"><span>◌</span>Agents</button>
+      <button class="tab-btn" data-tab="automations"><span>↻</span>Automations</button>
+      <button class="tab-btn" data-tab="routine"><span>◷</span>Routine</button>
+      <button class="tab-btn" data-tab="finances"><span>$</span>Finance</button>
+      <button class="tab-btn" data-tab="content"><span>□</span>Knowledge</button>
+      <button class="tab-btn" data-tab="schedule"><span>◴</span>Schedule</button>
+      <button class="tab-btn" data-tab="dreams"><span>✦</span>Dreams</button>
+    </div>
+    <div class="os-sidebar-footer">
+      <div class="nav-status"><div class="nav-status-dot" style="background:var(--atlas-accent);box-shadow:0 0 8px var(--atlas-accent)"></div><span id="statusLabel">Atlas active</span></div>
+      <span class="ver" id="verBadge">v2.0</span>
+    </div>
+  </aside>
+
+  <main class="main-area os-main">
+    <div class="os-topbar">
+      <div>
+        <p class="os-kicker">Lucas · Personal Operating System</p>
+        <h1 id="osPageTitle">Atlas</h1>
+      </div>
+      <div class="activity-bar" id="activityBar">
+        <div class="activity-dot" style="background:var(--atlas-accent);box-shadow:0 0 6px var(--atlas-accent)"></div>
+        <span class="activity-text" id="activityText">Atlas ready. How can I help?</span>
+        <span class="activity-time" id="activityTime"></span>
+        <button id="infoPanelToggle" style="background:transparent;border:1px solid rgba(255,255,255,0.08);color:var(--atlas-text-secondary);border-radius:8px;padding:4px 10px;font-size:11px;cursor:pointer;display:none;margin-left:8px">📊 Info</button>
+      </div>
+    </div>
+
+    <div class="os-workspace">
+      <!-- ─── ATLAS HUB — Primary View ─── -->
+      <div class="tab-area" id="tabArea">
+        <!-- Default: Atlas Hub -->
+        <div class="atlas-hub" id="atlasHub">
+
+          <!-- Hero greeting -->
+          <div class="atlas-hero">
+            <div class="atlas-hero-avatar">A</div>
+            <div class="atlas-hero-info">
+              <h1>Atlas</h1>
+              <p>System Operator · ferramenta n°1 de Lucas</p>
+            </div>
+            <div class="atlas-hero-status">
+              <div class="atlas-hero-dot"></div>
+              <span id="atlasHubStatus">Online</span>
+            </div>
+          </div>
+
+          <!-- Voice-enabled input bar -->
+          <form class="atlas-input-bar" id="atlasForm">
+            <button type="button" class="atlas-voice-btn" id="atlasVoiceBtn" title="Voice input (TTS-ready)" disabled>🎤</button>
+            <textarea id="atlasInput" rows="1" placeholder="O que você precisa, Lucas? Fale com Atlas — comandos, tasks, projetos, automações..." autofocus></textarea>
+            <button type="submit" class="atlas-send-btn" id="atlasSendBtn">↵</button>
+          </form>
+
+          <!-- Suggestion chips -->
+          <div class="atlas-chips" id="atlasSuggestions"></div>
+
+          <!-- Thinking indicator -->
+          <div class="atlas-thinking-bar" id="atlasThinkingBar">
+            <div class="atlas-thinking-dots">
+              <div class="atlas-thinking-dot"></div>
+              <div class="atlas-thinking-dot"></div>
+              <div class="atlas-thinking-dot"></div>
+            </div>
+            <span id="atlasThinkingLabel">Atlas está pensando...</span>
+          </div>
+
+          <!-- Atlas conversation -->
+          <div class="atlas-chat-area" id="atlasChat">
+            <div class="atlas-empty-state">
+              <div class="atlas-empty-icon">◈</div>
+              <div class="atlas-empty-title">Atlas está pronto</div>
+              <div class="atlas-empty-sub">Pergunte o que quiser — briefing do sistema, criar tarefas, gerenciar projetos, executar automações. Estou aqui para operar seu sistema.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── Tab Content Panels ─── -->
+        <div class="tab-content-area" id="tabContentArea">
+          <section class="tab-panel active" id="panel-overview" style="display:none !important"></section>
+          <section class="tab-panel" id="panel-agents"><div class="agent-grid-view" id="agentGridView"></div></section>
+          <section class="tab-panel" id="panel-tasks">
+            <div class="tasks-header" id="tasksHeader">
+              <div class="tasks-search-bar">
+                <span class="tasks-search-prefix">🔍</span>
+                <input type="text" id="taskSearch" placeholder="Search tasks..." />
+                <select id="taskFilterAssignee"><option value="">All agents</option><option value="orchestrator">🧠 Orchestrator</option><option value="scout">🔍 Scout</option><option value="scribe">✍️ Scribe</option><option value="reach">📡 Reach</option><option value="dev">🛠️ Dev</option></select>
+                <select id="taskFilterPriority"><option value="">All priorities</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+                <select id="taskFilterProject"><option value="">All projects</option></select>
+                <select id="taskSort"><option value="created_desc">Newest first</option><option value="created_asc">Oldest first</option><option value="priority">Priority</option><option value="due_date">Due date</option><option value="title">Title A-Z</option></select>
+                <button class="btn-cyber btn-cyber-ghost" id="taskShowArchived">📦 Archived</button>
+                <button class="btn-cyber" id="taskCreateBtn">+ New Task</button>
+              </div>
+              <div class="tasks-stats-bar" id="tasksStatsBar"><span>Total: <strong id="taskTotalCount">0</strong></span><span>⏳ <strong id="taskPendingCount">0</strong></span><span>🔄 <strong id="taskProgressCount">0</strong></span><span>✅ <strong id="taskDoneCount">0</strong></span><span style="color:var(--error)">⚠️ <strong id="taskOverdueCount">0</strong></span></div>
+            </div>
+            <div class="kanban" id="kanbanGrid"></div>
+          </section>
+          <section class="tab-panel" id="panel-automations"><div id="automationsContent"></div></section>
+          <section class="tab-panel" id="panel-projects"></section>
+          <section class="tab-panel" id="panel-schedule">
+            <div class="sched-header-bar"><div class="sched-stats" id="schedStats"><div class="sched-stat"><span class="sched-stat-value" id="schedTotalJobs">0</span><span class="sched-stat-label">Total Jobs</span></div><div class="sched-stat"><span class="sched-stat-value" id="schedTodayJobs">0</span><span class="sched-stat-label">Running Today</span></div><div class="sched-stat"><span class="sched-stat-value" id="schedNextJob">—</span><span class="sched-stat-label">Next Job</span></div></div><div class="sched-search-bar"><span class="sched-search-prefix">🔍</span><input type="text" id="schedSearch" placeholder="Search jobs..." /><select id="schedFilterOwner"><option value="">All owners</option><option value="hermes">Hermes</option><option value="system">System</option></select><select id="schedFilterFreq"><option value="">All frequencies</option><option value="daily">Daily</option><option value="weekly">Weekly</option><option value="monthly">Monthly</option><option value="one_shot">One-shot</option></select></div></div>
+            <div class="sched-timeline" id="schedTimeline"><div class="sched-timeline-label">Next 24h</div><div class="sched-timeline-track" id="schedTimelineTrack"></div><div class="sched-timeline-hours" id="schedTimelineHours"></div></div>
+            <div id="scheduleContent"></div>
+          </section>
+          <section class="tab-panel" id="panel-content"><div class="content-layout"><div class="content-sidebar" id="contentSidebar"></div><div class="content-preview" id="contentPreview"><p style="color:var(--text-tertiary);padding:40px;text-align:center">Select a document</p></div></div></section>
+          <section class="tab-panel" id="panel-dreams"><div class="dream-grid" id="dreamStatsGrid"></div><div class="section"><div class="section-title">Recent Dreams</div><div id="dreamEntries"></div></div></section>
+          <section class="tab-panel" id="panel-finances">
+            <div class="section finance-title"><div class="section-title" id="financeMonth">💰 Finanças</div><div><button class="qchip" onclick="prevFinanceMonth()">◀</button><button class="qchip" onclick="nextFinanceMonth()">▶</button></div></div>
+            <div class="stats-grid" id="financeSummaryGrid"></div>
+            <div class="section"><div class="section-title">📊 Gastos por Categoria</div><div id="financeCategoryChart"></div></div>
+            <div class="section"><div class="section-title">📈 Tendência Mensal (12 meses)</div><div id="financeTrendChart"></div></div>
+            <div class="section"><div class="section-title action-title"><span>📋 Transações</span><div><button class="btn-cyber btn-cyber-ghost" onclick="showAddTransaction()">+ Nova</button><button class="btn-cyber btn-cyber-ghost" onclick="window.exportCSV()">📥 CSV</button></div></div><div id="addTxForm" style="display:none;margin-bottom:8px"></div><div id="transactionList"></div></div>
+            <div class="section"><div class="section-title action-title"><span>🔄 Recorrentes</span><button class="btn-cyber btn-cyber-ghost" onclick="window.showAddRecurring()">+ Adicionar</button></div><div id="addRecurringForm" style="display:none;margin-bottom:8px"></div><div id="recurringList"></div></div>
+            <div class="section"><div class="section-title action-title"><span>🎯 Metas de Economia</span><button class="btn-cyber btn-cyber-ghost" onclick="window.showAddGoal()">+ Nova Meta</button></div><div id="addGoalForm" style="display:none;margin-bottom:8px"></div><div id="goalsList"></div></div>
+          </section>
+          <section class="tab-panel" id="panel-routine"><div class="section"><div class="section-title">📅 Hoje</div><div id="todayHabits"></div><div id="todayProgress"></div></div><div class="section"><div class="section-title">📝 Daily Log</div><div id="dailyLogForm"></div></div><div class="section"><div class="section-title">🔥 Streaks</div><div id="streakCards" class="stats-grid"></div></div><div class="section"><div class="section-title">📆 Últimos 7 Dias</div><div id="habitHistory"></div></div></section>
+        </div>
+      </div>
+
+      <!-- ─── INFO PANEL — Live Cards ─── -->
+      <aside class="atlas-info-panel" id="atlasInfoPanel">
+
+        <!-- Today's Focus -->
+        <div class="atlas-info-card" id="infoFocusCard">
+          <div class="atlas-info-card-title">🎯 Today's Focus</div>
+          <div id="infoFocusList">
+            <div style="font-size:12px;color:var(--atlas-text-tertiary)">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Agent Status -->
+        <div class="atlas-info-card">
+          <div class="atlas-info-card-title">🤖 Agent Status</div>
+          <div id="infoAgentList">
+            <div class="atlas-agent-row"><div class="atlas-agent-dot idle"></div><span class="atlas-agent-name">Orchestrator</span><span class="atlas-agent-queued">idle</span></div>
+            <div class="atlas-agent-row"><div class="atlas-agent-dot idle"></div><span class="atlas-agent-name">Scout</span><span class="atlas-agent-queued">idle</span></div>
+            <div class="atlas-agent-row"><div class="atlas-agent-dot idle"></div><span class="atlas-agent-name">Scribe</span><span class="atlas-agent-queued">idle</span></div>
+            <div class="atlas-agent-row"><div class="atlas-agent-dot idle"></div><span class="atlas-agent-name">Reach</span><span class="atlas-agent-queued">idle</span></div>
+            <div class="atlas-agent-row"><div class="atlas-agent-dot idle"></div><span class="atlas-agent-name">Dev</span><span class="atlas-agent-queued">idle</span></div>
+          </div>
+        </div>
+
+        <!-- System Health -->
+        <div class="atlas-info-card">
+          <div class="atlas-info-card-title">📊 System Health</div>
+          <div class="atlas-health-grid" id="infoHealthGrid">
+            <div class="atlas-health-item"><span class="atlas-health-value" id="healthCPU">—</span><span class="atlas-health-label">CPU</span></div>
+            <div class="atlas-health-item"><span class="atlas-health-value" id="healthRAM">—</span><span class="atlas-health-label">RAM</span></div>
+            <div class="atlas-health-item"><span class="atlas-health-value" id="healthDisk">—</span><span class="atlas-health-label">Disk</span></div>
+            <div class="atlas-health-item"><span class="atlas-health-value" id="healthDB">ok</span><span class="atlas-health-label">Database</span></div>
+          </div>
+        </div>
+
+        <!-- Finance -->
+        <div class="atlas-info-card">
+          <div class="atlas-info-card-title">💰 Finanças · Junho</div>
+          <div id="infoFinanceList">
+            <div class="atlas-finance-row"><span class="atlas-finance-cat">Total gasto</span><span class="atlas-finance-val" id="financeTotal">R$ —</span></div>
+            <div class="atlas-finance-row"><span class="atlas-finance-cat">Orçamento</span><span class="atlas-finance-val" id="financeBudget">R$ —</span></div>
+            <div class="atlas-finance-bar"><div class="atlas-finance-bar-fill" id="financeBar" style="width:0%"></div></div>
+            <div class="atlas-finance-row" style="border:none"><span class="atlas-finance-cat">alimentação</span><span class="atlas-finance-val" id="financeCategory">R$ —</span></div>
+          </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="atlas-info-card">
+          <div class="atlas-info-card-title">⚡ Activity Feed</div>
+          <div id="atlasActivityFeed">
+            <div style="font-size:12px;color:var(--atlas-text-tertiary)">Loading...</div>
+          </div>
+        </div>
+
+        <!-- Habit -->
+        <div class="atlas-info-card" id="infoHabitCard">
+          <div class="atlas-info-card-title">📚 Habits</div>
+          <div id="infoHabitList">
+            <div style="font-size:12px;color:var(--atlas-text-tertiary)">Ler 20min · <span id="habitStatus" style="color:var(--atlas-text-tertiary)">não feito hoje</span></div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div id="taskModalContainer"></div>
+<div id="toasts"></div>
+
+<script type="module" src="/js/app.js"></script>
+<script type="module" src="/js/atlas-hub.js"></script>
+</body>
+</html>
