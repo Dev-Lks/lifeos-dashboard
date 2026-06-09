@@ -1,0 +1,18 @@
+services:
+  lifeos:
+    build: .
+    container_name: lifeos
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8700}:8700"
+    environment:
+      - LIFEOS_PASSWORD=${LIFEOS_PASSWORD}
+      - LIFEOS_SESSION_SECRET=${LIFEOS_SESSION_SECRET}
+      - LIFEOS_DATA_DIR=/data
+      - LIFEOS_ENABLE_SHELL=${LIFEOS_ENABLE_SHELL:-0}
+      - PORT=8700
+    volumes:
+      - lifeos_data:/data
+
+volumes:
+  lifeos_data:

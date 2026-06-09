@@ -1,48 +1,84 @@
-# Hermes LifeOS Dashboard
+# LifeOS v4
 
-Personal dashboard for Lucas — modular, self-hosted, single-page app with finance tracking, task management, routines, agent monitoring, and system health.
+Personal operating system dashboard — FastAPI backend + React frontend.
 
 ## Quick Start
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+# 1. Configure environment
+cp .env.example .env
+# Edit .env with your LIFEOS_PASSWORD and LIFEOS_SESSION_SECRET
+
+# 2. Install dependencies
 pip install -r requirements.txt
-python3 server.py
+cd frontend && npm ci && cd ..
+
+# 3. Build frontend
+npm --prefix frontend run build
+
+# 4. Start server
+python -m server.main
+# → http://127.0.0.1:8700
 ```
 
-Then open http://localhost:8700
+## Docker (recommended)
 
-## Structure
-
-```
-├── server.py          # Python HTTP server (entry point)
-├── index.html         # SPA shell
-├── css/styles.css     # All styles
-├── js/                # Frontend JS modules
-│   ├── app.js         # Router + init
-│   ├── hub.js         # Overview tab
-│   ├── finance.js     # Finance tab
-│   ├── tasks.js       # Tasks tab
-│   ├── schedule.js    # Schedule tab
-│   ├── routine.js     # Routine tab
-│   ├── agents.js      # Agents tab
-│   ├── dreams.js      # Dreams tab
-│   ├── content.js     # Content tab
-│   └── ...
-├── server/            # Python backend modules
-│   ├── data.py        # Dashboard data snapshot
-│   ├── finance.py     # Finance API
-│   ├── cron.py        # Schedule/cron API
-│   ├── kanban.py      # Tasks board API
-│   ├── routine.py     # Habits/Routine API
-│   ├── db.py          # Database migration
-│   └── ...
-├── db/                # SQLite databases (gitignored)
-├── plans/             # Design docs
-└── tests/             # Smoke tests
+```bash
+cp .env.example .env
+# Edit .env with your LIFEOS_PASSWORD and LIFEOS_SESSION_SECRET
+docker compose up --build -d
 ```
 
-## VPS (production)
+## Validate
 
-Systemd service runs on port 8700. See `start.sh`.
+```bash
+pytest -q                    # backend tests
+npm --prefix frontend run lint    # frontend lint
+npm --prefix frontend run build   # frontend build
+curl http://127.0.0.1:8700/api/health  # health check
+```
+
+## Architecture
+
+```
+├── server/                # FastAPI backend
+│   ├── main.py            # Entry point
+│   ├── app.py             # App + routes + auth
+│   ├── config.py          # Env var configuration
+│   ├── data.py            # Dashboard snapshot + agents
+│   ├── finance.py         # Finance API
+│   ├── kanban.py          # Tasks (SQLite board)
+│   ├── routine.py         # Habits, journals
+│   ├── content.py         # Content manager
+│   ├── cron.py            # Schedule / cron
+│   ├── lifeos.py          # Command center + automations
+│   ├── right_hand.py      # Atlas — right-hand copilot
+│   ├── sse.py             # Server-sent events
+│   └── db.py              # Idempotent migrations
+├── frontend/              # Vite + React + TypeScript
+│   ├── src/
+│   │   ├── App.tsx        # Routes + auth gate
+│   │   ├── main.tsx       # Entry point
+│   │   ├── components/
+│   │   │   └── Layout.tsx
+│   │   ├── pages/         # /, /work, /finance, /routine, /automations, /systems
+│   │   └── styles/
+│   ├── package.json
+│   ├── vite.config.ts
+│   └── tsconfig.json
+├── .env.example
+├── Dockerfile
+├── docker-compose.yml
+└── requirements.txt
+```
+
+## Security
+
+- All `/api/` routes and `/events` require a valid session cookie (HttpOnly)
+- Login via `/api/auth/login` with `LIFEOS_PASSWORD`
+- Shell actions disabled by default (`LIFEOS_ENABLE_SHELL=0`)
+- Data persisted to `LIFEOS_DATA_DIR` (default: `./data/`)
+
+## Atlas (Right-Hand Copilot)
+
+Atlas works without Hermes CLI installed — falls back to local-only mode. Ask questions, approve actions, manage sessions. All mutating actions are approval-gated.

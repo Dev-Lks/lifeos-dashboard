@@ -1,1 +1,1 @@
-# server package
+"""LifeOS server package — FastAPI backend modules."""

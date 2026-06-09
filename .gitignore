@@ -32,5 +32,12 @@ Thumbs.db
 .env
 *.local.*
 
+# Frontend
+frontend/dist/
+frontend/node_modules/
+
+# Data
+data/
+
 # Logs
 *.log

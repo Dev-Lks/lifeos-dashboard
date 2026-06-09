@@ -1,9 +1,6 @@
-# Hermes LifeOS Dashboard — Python dependencies
-# Core
+# LifeOS v4 backend dependencies
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
 psutil>=5.9
-
-# Content rendering
 markdown>=3.4
-
-# SSE / streaming
-sse-starlette>=1.6  # optional, only if using ASGI mode
+python-multipart>=0.0.20  # for FastAPI forms
