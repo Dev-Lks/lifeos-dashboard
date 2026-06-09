@@ -11,11 +11,17 @@ build/
 venv/
 .venv/
 
+# Frontend
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
 # Database files
 db/*.db
 db/*.db-journal
 db/*.db-wal
 db/*.db-shm
+data/
 
 # IDE
 .vscode/

@@ -1,0 +1,23 @@
+{
+  "name": "ATLAS Hermes LifeOS",
+  "short_name": "LifeOS",
+  "description": "Personal command center for tasks, projects, routines, finance, automations and Atlas.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#00ff88",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {"name": "Tasks", "url": "/work", "description": "Open tasks and projects"},
+    {"name": "Finance", "url": "/finance", "description": "Open finance dashboard"},
+    {"name": "Routine", "url": "/routine", "description": "Open routine tracker"}
+  ]
+}

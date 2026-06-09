@@ -720,4 +720,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    from server.main import main as fastapi_main
+
+    fastapi_main()

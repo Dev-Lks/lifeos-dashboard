@@ -4,8 +4,8 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path('/root')
-sys.path.insert(0, str(ROOT / 'hermes-dashboard'))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from server.right_hand import right_hand_context, ask_right_hand  # noqa: E402
 

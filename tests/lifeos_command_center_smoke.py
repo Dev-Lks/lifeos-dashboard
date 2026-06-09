@@ -4,8 +4,8 @@ import json
 import sys
 from pathlib import Path
 
-ROOT = Path('/root')
-sys.path.insert(0, str(ROOT / 'hermes-dashboard'))
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from server.db import get_conn, migrate_all  # noqa: E402
 from server.kanban import create_board_task  # noqa: E402

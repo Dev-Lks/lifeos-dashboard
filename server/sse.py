@@ -41,9 +41,24 @@ sse_manager = SSEManager()
 def broadcaster_thread():
     """Push snapshots to SSE clients every 2 seconds."""
     from .data import build_snapshot
+    from .data import _vps_stats
     while True:
         try:
             snap = build_snapshot()
+            vps = _vps_stats()
+            snap["health"] = {
+                "cpu_percent": vps.get("cpu_pct", 0),
+                "memory": {
+                    "percent_used": vps.get("mem_pct", 0),
+                    "used_mb": vps.get("mem_used_mb", 0),
+                    "total_mb": vps.get("mem_total_mb", 0),
+                },
+                "disk": {
+                    "percent_used": vps.get("disk_pct", 0),
+                    "used_gb": vps.get("disk_used_gb", 0),
+                    "total_gb": vps.get("disk_total_gb", 0),
+                },
+            }
             payload = json.dumps(snap, default=str)
             sse_manager.broadcast(f"data: {payload}\n\n")
         except Exception:

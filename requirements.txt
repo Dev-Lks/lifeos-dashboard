@@ -1,5 +1,7 @@
 # Hermes LifeOS Dashboard — Python dependencies
 # Core
+fastapi>=0.115
+uvicorn[standard]>=0.30
 psutil>=5.9
 
 # Content rendering
@@ -7,3 +9,7 @@ markdown>=3.4
 
 # SSE / streaming
 sse-starlette>=1.6  # optional, only if using ASGI mode
+
+# Tests
+pytest>=8.0
+httpx>=0.27

@@ -6,6 +6,7 @@ mutating actions are never applied until Lucas approves them in the UI.
 """
 import json
 import os
+import shutil
 import shlex
 import sqlite3
 import subprocess
@@ -39,8 +40,8 @@ from .lifeos import (
 )
 from .routine import _habit_streaks, _today_status
 from .finance import _month_summary
-
-ATLAS_DB = Path(__file__).parent.parent / "db/atlas.db"
+from .config import ATLAS_DB
+from .auth import shell_enabled
 
 RIGHT_HAND_SYSTEM = """You are Atlas, Lucas's Right-Hand Agent inside Hermes Life OS.
 You are Lucas's #1 operational tool. You can see dashboard context and you can propose actions across tasks, projects, automations, and system commands.
@@ -348,6 +349,39 @@ USER_MESSAGE:
 Respond as Atlas. If proposals exist, tell Lucas they are waiting for approval. If the request needs a new action not listed, describe the exact action payload Lucas should approve.
 """
     thinking = "Loaded Life OS context → reviewed recent chat history → checked for action intent → prepared approval-gated response."
+    if not shutil.which("hermes"):
+        focus = ctx.get("command_center", {}).get("today_focus", [])[:3]
+        recommendations = ctx.get("command_center", {}).get("recommendations", [])[:3]
+        lines = [
+            "Atlas local fallback online.",
+            "",
+            "Hermes CLI is not installed in this environment, so I can show context and queue deterministic approvals, but I cannot call the external agent runtime.",
+        ]
+        if focus:
+            lines.append("\nToday focus:")
+            lines.extend(f"- {item.get('title', 'Untitled')} ({item.get('priority', 'medium')})" for item in focus)
+        if recommendations:
+            lines.append("\nRecommendations:")
+            lines.extend(f"- {item.get('message', '')}" for item in recommendations)
+        if proposals:
+            lines.append("\nApproval queued:")
+            lines.extend(f"- {item.get('summary', item.get('action_type'))}" for item in proposals)
+        lines.append("\nSet up the `hermes` CLI in the host/container to enable full Atlas reasoning.")
+        response = "\n".join(lines)
+        assistant_mid = _add_message(session_id, "assistant", response, thinking=thinking, actions=proposals)
+        approvals = _store_approvals(session_id, assistant_mid, proposals)
+        return {
+            "agent": ctx["agent"],
+            "session_id": session_id,
+            "user_message_id": user_mid,
+            "assistant_message_id": assistant_mid,
+            "response": response,
+            "thinking": thinking,
+            "actions": approvals,
+            "exit_code": 127,
+            "context_generated_at": ctx["generated_at"],
+            "fallback": "missing_hermes_cli",
+        }
     try:
         db = _atlas_conn()
         sess = db.execute("SELECT hermes_session_id FROM atlas_sessions WHERE id=?", (session_id,)).fetchone()
@@ -421,6 +455,9 @@ def execute_atlas_action(approval_id):
         elif action == "automation_run":
             result = run_automation(payload["id"])
         elif action == "shell_command":
+            if not shell_enabled():
+                result = {"error": "shell actions are disabled by LIFEOS_ENABLE_SHELL"}
+                raise RuntimeError(result["error"])
             command = payload.get("command", "")
             if not command.strip():
                 result = {"error": "empty command"}
