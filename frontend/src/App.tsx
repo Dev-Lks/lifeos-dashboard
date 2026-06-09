@@ -13,9 +13,11 @@ export default function App() {
   const [authed, setAuthed] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetch("/api/health", { credentials: "same-origin" })
-      .then((r) => r.json())
-      .then(() => setAuthed(true))
+    fetch("/api/data", { credentials: "same-origin" })
+      .then((r) => {
+        if (r.ok) setAuthed(true);
+        else setAuthed(false);
+      })
       .catch(() => setAuthed(false));
   }, []);
 
