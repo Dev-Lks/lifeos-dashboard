@@ -1,6 +1,8 @@
-# LifeOS v4
+# LifeOS Dashboard
 
-Personal operating system dashboard — FastAPI backend + React frontend.
+Personal operating system dashboard — FastAPI backend + React (Vite + TypeScript) frontend.
+
+> Modular dashboard with finance, tasks, routines, agents and system health. Docker-ready, runs at `http://127.0.0.1:8700`.
 
 ## Quick Start
 
@@ -37,6 +39,15 @@ npm --prefix frontend run lint    # frontend lint
 npm --prefix frontend run build   # frontend build
 curl http://127.0.0.1:8700/api/health  # health check
 ```
+
+## Features
+
+- Finance tracker and overview
+- Task board (SQLite-backed kanban)
+- Routines, habits and journals
+- Content manager and automations
+- System health monitoring
+- Atlas right-hand copilot (approval-gated actions)
 
 ## Architecture
 
